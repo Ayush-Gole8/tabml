@@ -1,0 +1,42 @@
+# =============================================================================
+# TabML-Guard configuration
+# -----------------------------------------------------------------------------
+# This is the ONLY file you edit to run the pipeline on a new dataset.
+# Point it at an OpenML dataset by name, or at a local CSV, set the target
+# (and optionally a time column), then run:   python run.py --config config.yaml
+# =============================================================================
+
+dataset:
+  source: openml          # openml | csv
+  name: electricity       # OpenML dataset name (this is ELEC2). Ignored if source: csv
+  # path: data/mydata.csv # used only when source: csv
+  version: 1              # OpenML version
+  target: class           # the column to predict
+  time_col: date          # column that gives temporal order; set to null if none
+  use_time_as_feature: false   # if false, time_col is used only for ordering, not as a feature
+
+task: auto                # auto | classification | regression  (auto = detect from target)
+
+split:
+  train_frac: 0.6         # earliest 60% of rows -> training
+  test_frac: 0.4          # latest 40% of rows  -> testing   (temporal, NO shuffling)
+
+models:
+  boosters: [xgboost, lightgbm, catboost, random_forest]
+  stacking: true          # add a stacking meta-model (RegStack-inspired)
+
+tuning:
+  budget_trials: 40       # Optuna trials; Grid/Random searches matched to a similar budget
+  cv_splits: 3            # number of TimeSeriesSplit folds used during tuning
+  scoring: null           # null -> auto (roc_auc for classification, neg RMSE for regression)
+
+drift:
+  n_chunks: 10            # split the temporal test stream into this many time-ordered chunks
+  retrain: sliding        # none | periodic | sliding   (how the "adaptive" model updates)
+
+report:
+  title: "TabML-Guard Report — Electricity Price Movement"
+  fbeta: 2.0              # beta for the F-beta score (2.0 weights recall higher)
+
+random_state: 42
+output_dir: results
