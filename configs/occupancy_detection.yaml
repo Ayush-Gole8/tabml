@@ -1,0 +1,48 @@
+# =============================================================================
+# Room Occupancy Detection  —  CLASSIFICATION, time-ordered
+# Mirrors the ELEC2 story (McNemar + drift) on a cleaner, all-numeric signal.
+# -----------------------------------------------------------------------------
+# Get the data (free, no login):
+#   UCI ML Repository "Occupancy Detection" (dataset 357).
+#   It ships as datatraining.txt / datatest.txt / datatest2.txt — each is
+#   comma-separated WITH a header. Concatenate them in this order into
+#   data/occupancy.csv (keep a single header row).
+# The files carry a leading row-id column; pandas usually loads it as the index
+# (harmless). If it instead shows up as a feature, add its name to drop_cols.
+#
+# Run:  python run.py --config configs/occupancy_detection.yaml
+# =============================================================================
+
+dataset:
+  source: csv
+  path: data/occupancy.csv
+  target: Occupancy          # 0 = room empty, 1 = occupied
+  time_col: date             # ISO timestamps -> chronological split + drift
+  use_time_as_feature: false
+  drop_cols: []              # e.g. ["Unnamed: 0"] if a row-id column appears
+
+task: auto                   # -> classification (target has 2 values)
+
+split:
+  train_frac: 0.6
+  test_frac: 0.4
+
+models:
+  boosters: [xgboost, lightgbm, catboost, random_forest]
+  stacking: true
+
+tuning:
+  budget_trials: 40
+  cv_splits: 3
+  scoring: null
+
+drift:
+  n_chunks: 10
+  retrain: sliding
+
+report:
+  title: "TabML-Guard Report — Room Occupancy Detection"
+  fbeta: 2.0
+
+random_state: 42
+output_dir: results

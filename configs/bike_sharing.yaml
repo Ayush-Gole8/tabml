@@ -1,0 +1,51 @@
+# =============================================================================
+# Bike Sharing Demand (hourly)  —  REGRESSION, time-ordered
+# The headline demo for drop_cols: this dataset contains TARGET LEAKAGE.
+# 'casual' + 'registered' add up exactly to the target 'cnt', and 'instant'
+# is just a row id. Left in, the model would "cheat" and score a fake ~1.0 R2.
+# Listing them in drop_cols is what makes the evaluation honest.
+# -----------------------------------------------------------------------------
+# Get the data (free, no login):
+#   UCI ML Repository "Bike Sharing" (dataset 275). Use the HOURLY file
+#   hour.csv, saved as data/bike_sharing.csv (so the report is named after the
+#   dataset: report_bike-sharing.html).
+#   Columns: instant, dteday, season, yr, mnth, hr, holiday, weekday,
+#            workingday, weathersit, temp, atemp, hum, windspeed,
+#            casual, registered, cnt.
+#
+# Run:  python run.py --config configs/bike_sharing.yaml
+# =============================================================================
+
+dataset:
+  source: csv
+  path: data/bike_sharing.csv
+  target: cnt                          # total rentals that hour -> regression
+  time_col: dteday                     # date -> chronological split + drift
+  use_time_as_feature: false
+  drop_cols: [instant, casual, registered]   # id + two leakage columns
+
+task: auto                             # -> regression
+
+split:
+  train_frac: 0.6
+  test_frac: 0.4
+
+models:
+  boosters: [xgboost, lightgbm, catboost, random_forest]
+  stacking: true
+
+tuning:
+  budget_trials: 40
+  cv_splits: 3
+  scoring: null
+
+drift:
+  n_chunks: 10
+  retrain: sliding
+
+report:
+  title: "TabML-Guard Report — Bike Sharing Demand"
+  fbeta: 2.0
+
+random_state: 42
+output_dir: results
