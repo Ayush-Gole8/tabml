@@ -75,13 +75,13 @@ tabml-guard/
 | Stage | Status |
 |-------|--------|
 | 0 — Data (load / profile / task-detect / temporal split) | ✅ implemented |
-| 1 — Regularized baselines | 🔧 scaffolded |
-| 2 — Boosting + stacking | 🔧 scaffolded |
-| 3 — HPO comparison | 🔧 scaffolded |
-| 4 — SHAP + reliability | 🔧 scaffolded |
-| 5 — Drift monitoring | 🔧 scaffolded |
-| — McNemar's test | 🔧 scaffolded |
-| — HTML report | 🔧 scaffolded (placeholder renders the data profile) |
+| 1 — Regularized baselines | ✅ implemented |
+| 2 — Boosting + stacking | ✅ implemented |
+| 3 — HPO comparison | ✅ implemented |
+| 4 — SHAP + reliability | ✅ implemented |
+| 5 — Drift monitoring | ✅ implemented |
+| — McNemar's test | ✅ implemented |
+| — HTML report | ✅ implemented (placeholder renders the data profile) |
 
 Running the pipeline today loads the data, profiles it, performs the temporal
 split, and writes a placeholder report — so you can confirm the environment and
