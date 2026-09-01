@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pkl
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Generated outputs (keep folder structure, ignore contents)
+results/figures/*
+results/tables/*
+!results/figures/.gitkeep
+!results/tables/.gitkeep
+# Ignore generated reports, but keep the committed electricity showcase
+results/report_*.html
+!results/report_electricity.html
+
+# Downloaded datasets / OpenML cache
+data/*
+!data/.gitkeep
+
+# OS / editor
+.DS_Store
+.ipynb_checkpoints/
+.vscode/
+.idea/
