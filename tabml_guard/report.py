@@ -602,7 +602,7 @@ def _sec_explain(ctx: dict, output_dir: str) -> str:
                  "auto-accept the rest, how many mistakes does that catch?</p>")
         stat_rows = [
             ["Overall accuracy", _num(rel.get("overall_accuracy"))],
-            [f"Flag the least-confident", _pct(rel.get("coverage_flagged"), 0)],
+            ["Flag the least-confident", _pct(rel.get("coverage_flagged"), 0)],
             ["→ errors caught by flagging",
              f"{_pct(rel.get('error_capture_rate'), 0)} "
              f"({_num(rel.get('errors_caught_by_flag'))} of {_num(rel.get('errors_total'))})"],
