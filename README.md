@@ -12,7 +12,7 @@ Point TabML-Guard at any tabular dataset (an OpenML name/id, local CSV, or in-me
 
 The **tool is the deliverable**; the datasets are just demonstrations. Nothing in `tabml_guard/` knows about any specific dataset — every dataset detail lives in the config or CLI arguments.
 
-![TabML-Guard example outputs](assets/sample_outputs.png)
+![TabML-Guard example outputs](https://raw.githubusercontent.com/Ayush-Gole8/tabml/main/assets/sample_outputs.png)
 
 ---
 
@@ -22,7 +22,6 @@ The **tool is the deliverable**; the datasets are just demonstrations. Nothing i
 - [Installation](#installation)
 - [Quickstart](#quickstart)
 - [The pipeline](#the-pipeline)
-- [Architecture & layers of abstraction](#architecture--layers-of-abstraction)
 - [Configuration reference](#configuration-reference)
 - [Run it on your own data](#run-it-on-your-own-data)
 - [Outputs](#outputs)
@@ -129,83 +128,53 @@ results/electricity/report_electricity.pdf
 
 ## The pipeline
 
-TabML-Guard runs six stages (S0–S5) and then assembles the report. Each stage hands the next an in-memory context object carrying the fitted models and the running "best model so far."
+TabML-Guard executes six coordinated stages (S0–S5) end to end, threading intermediate state in memory and producing a comprehensive diagnostic verdict:
 
-```mermaid
-flowchart TD
-    CFG["config.yaml - the one file you edit"]:::io
-    CFG --> S0
-    S0["S0 · Data<br/>load · profile · auto-detect task · temporal split"]:::st
-    S1["S1 · Regularized baselines<br/>L1 / L2 / ElasticNet · regularization path"]:::st
-    S2["S2 · Ensembles<br/>XGBoost · LightGBM · CatBoost · RandomForest · stacking"]:::st
-    S3["S3 · HPO comparison<br/>Default · Grid · Random · Bayesian - accuracy AND cost"]:::st
-    S4["S4 · Explainability<br/>SHAP global + local · confidence reliability triage"]:::st
-    S5["S5 · Drift + significance<br/>prequential · PSI · McNemar / Wilcoxon"]:::st
-    RPT["report_&lt;dataset&gt;.html<br/>self-contained · plain-English verdict on top"]:::io
-    S0 --> S1 --> S2 --> S3 --> S4 --> S5 --> RPT
-    classDef io fill:#0f766e,stroke:#0b544e,color:#ffffff;
-    classDef st fill:#eef2f7,stroke:#14213d,color:#14213d;
+```text
+[ Raw Data / CSV / OpenML / DataFrame ]
+                   │
+                   ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ Stage 0 · Data Ingestion, Profiling & Temporal Splitting               │
+│ • Auto-detects task (Classification vs. Regression) from target column  │
+│ • Builds leakage-safe preprocessor (fit strictly on training folds)    │
+│ • Preserves chronological order (earliest rows train, latest test)     │
+├────────────────────────────────────────────────────────────────────────┤
+│ Stage 1 · Regularized Linear Baselines                                 │
+│ • Fits L1 (Lasso) sparsity, L2 (Ridge) shrinkage, and ElasticNet       │
+│ • Traces full regularization path to expose bias-variance sweet spots  │
+├────────────────────────────────────────────────────────────────────────┤
+│ Stage 2 · Modern Ensembles & Stacking Meta-Model                       │
+│ • Trains XGBoost, LightGBM, CatBoost, and Random Forest                │
+│ • Fits regularized stacking meta-model (RegStack architecture)         │
+├────────────────────────────────────────────────────────────────────────┤
+│ Stage 3 · Cost-Accounted Hyperparameter Optimization (HPO)             │
+│ • Compares Default vs. Grid vs. Random vs. Bayesian (Optuna TPE)       │
+│ • Strictly matched evaluation budgets: evaluates Score vs. Compute     │
+├────────────────────────────────────────────────────────────────────────┤
+│ Stage 4 · Explainability & Prediction Reliability Triage               │
+│ • Model-aware SHAP attributions (global importances + local drivers)   │
+│ • Calibrated confidence guardrail: routes uncertain cases to human     │
+├────────────────────────────────────────────────────────────────────────┤
+│ Stage 5 · Concept Drift & Statistical Significance                     │
+│ • Prequential walk-forward evaluation: races frozen vs. retrained model│
+│ • Population Stability Index (PSI) tracks covariate shift over time    │
+│ • McNemar's (classification) / Wilcoxon (regression) significance tests│
+└────────────────────────────────────────────────────────────────────────┘
+                   │
+                   ▼
+[ Self-Contained Interactive HTML Report + Publication-Ready PDF Report ]
 ```
 
-| Stage | Module | What it does |
-|---|---|---|
-| **S0 - Data** | `src/data.py` | Loads from OpenML or CSV, profiles the columns, auto-detects the task from the target, builds a leakage-safe preprocessor, and splits **by time** (earliest rows train, latest rows test). |
-| **S1 - Baselines** | `src/baselines.py` | Fits regularized linear baselines (L1/L2/ElasticNet for classification; Ridge/Lasso/ElasticNet for regression) and traces a **regularization path** so the bias–variance behaviour is visible. |
-| **S2 - Ensembles** | `src/boosting.py` | Trains XGBoost, LightGBM, CatBoost and RandomForest, plus a **stacking** meta-model, and picks the best booster to carry into tuning. |
-| **S3 - HPO comparison** | `src/tuning.py` | Runs Default vs Grid vs Random vs **Bayesian (Optuna)** on the best booster at an **equal budget**, recording accuracy *and* wall-clock/evaluation count - an explicit "is tuning worth the cost?" answer. |
-| **S4 - Explainability** | `src/explain.py` | Computes SHAP (model-type-aware: tree/linear/agnostic) for global and local attributions, then a **reliability layer** that routes the least-confident predictions to human review. |
-| **S5 - Drift & significance** | `src/drift.py`, `src/stats.py` | Walk-forward (prequential) monitoring of a frozen vs. periodically-retrained model, PSI input-drift tracking, and **McNemar** (classification) / **Wilcoxon** (regression) tests on the key model comparisons. |
-| **Report** | `src/report.py` | Assembles everything into one self-contained HTML file with a verdict panel on top. |
-
----
-
-## Architecture & layers of abstraction
-
-TabML-Guard is deliberately layered so that **the surface a user touches is tiny**, while the machinery underneath stays open for developers. From top to bottom, each layer only depends on the one below it:
-
-```mermaid
-flowchart TB
-    subgraph U["① User surface - what you touch"]
-      CFG["config.yaml"]
-      REP["report_&lt;dataset&gt;.html"]
-    end
-    subgraph O["② Orchestration"]
-      RUN["run.py<br/>threads ctx (fitted models, in-memory)<br/>and report_ctx (JSON-safe summaries)"]
-    end
-    subgraph E["③ Stage engine - src/"]
-      ENG["data · baselines · boosting<br/>tuning · explain · drift"]
-    end
-    subgraph C["④ Shared core - src/"]
-      CORE["modeling (the single fit/evaluate path) · metrics<br/>plots · stats · config · report"]
-    end
-    CFG --> RUN --> ENG --> CORE --> REP
-```
-
-**As a user**, you interact with exactly two things: the config you write and the report you read. Everything else is an implementation detail.
-
-**As a developer**, the map below tells you where each concern lives and whether you'd ever need to touch it:
-
-| Module | Layer | Responsibility | Touch it? |
-|---|---|---|---|
-| `config.yaml` | ① surface | Every dataset-specific decision | **Always** - this is the interface |
-| `run.py` | ② orchestration | Runs the stages in order; owns `ctx` and `report_ctx` | Rarely |
-| `src/config.py` | core | Loads/validates YAML into typed dataclasses | Only to add a config field |
-| `src/data.py` | engine | Load, profile, task-detect, preprocess, temporal split | To support a new source |
-| `src/modeling.py` | core | **The single `fit_evaluate` path** every model goes through | Rarely - it's the invariant |
-| `src/metrics.py` | core | Task-aware metrics | To add a metric |
-| `src/baselines.py` | engine (S1) | Regularized baselines + regularization path | To change baselines |
-| `src/boosting.py` | engine (S2) | Boosters + stacking | To add a booster |
-| `src/tuning.py` | engine (S3) | The four HPO strategies + cost accounting | To add a strategy |
-| `src/explain.py` | engine (S4) | SHAP + reliability triage | To change explanations |
-| `src/drift.py` | engine (S5) | Prequential drift + PSI + retraining | To change drift logic |
-| `src/stats.py` | core | McNemar / Wilcoxon significance tests | Rarely |
-| `src/plots.py` | core | matplotlib figure helpers (headless) | To restyle figures |
-| `src/report.py` | core | Pure-stdlib self-contained HTML assembly | To restyle the report |
-
-The two objects `run.py` threads through the stages are worth calling out, because they encode a clean separation:
-
-- **`ctx`** - an in-memory scratchpad holding *fitted estimators, predictions, and the running best model*. It is never serialized.
-- **`report_ctx`** - only *JSON-safe per-stage summaries*. This is what gets written to `results/tables/results.json` and handed to the report builder.
+| Stage | What it achieves |
+|---|---|
+| **S0 · Ingestion & Split** | Ingests from CSV, OpenML, or DataFrame, profiles schema and missingness, infers task type, builds a leakage-safe preprocessor, and splits chronologically so the model never peeks into the future. |
+| **S1 · Baselines** | Establishes the honest yardstick with regularized linear models (L1/L2/ElasticNet) and traces a regularization path to reveal whether regularization strength actually moves the fit. |
+| **S2 · Ensembles** | Trains XGBoost, LightGBM, CatBoost, Random Forest, plus a stacking ensemble with a regularized meta-learner, and selects the strongest booster for optimization. |
+| **S3 · Cost-Accounted HPO** | Runs Default vs. Grid vs. Random vs. Bayesian (Optuna) at an **equal evaluation budget**, tracking score alongside wall-clock compute to measure if tuning justified its cost. |
+| **S4 · Explainability & Triage** | Computes SHAP feature attributions, then evaluates a **reliability layer** that flags low-confidence predictions, measuring how many real-world errors are caught by human review. |
+| **S5 · Drift & Significance** | Replays the held-out test stream in ordered chunks, compares frozen vs. sliding-window retraining, tracks feature PSI, and runs paired statistical tests (McNemar / Wilcoxon). |
+| **Deliverables** | Persists the champion scikit-learn pipeline (`best_model.pkl`) and compiles standalone, portable HTML and PDF diagnostic reports. |
 
 ---
 
@@ -305,13 +274,12 @@ The report embeds every figure as base64, so a single `.html` file is fully port
 
 The feature that most separates TabML-Guard from a typical notebook is that it never pretends the future is available at training time.
 
-```mermaid
-flowchart LR
-    TR["Train - earliest 60%"]:::tr --> TE["Test stream - latest 40%"]:::te
-    TE --> K1["chunk 1"]:::ck --> K2["chunk 2"]:::ck --> K3["…"]:::ck --> KN["chunk n"]:::ck
-    classDef tr fill:#14213d,color:#fff,stroke:#0b1220;
-    classDef te fill:#0f766e,color:#fff,stroke:#0b544e;
-    classDef ck fill:#eef2f7,color:#14213d,stroke:#14213d;
+```text
+[ Training Window: Earliest 60% ] ──> [ Held-Out Test Stream: Latest 40% ]
+                                                 │
+                                                 ├──> Chunk 1 (Evaluate ──> Retrain)
+                                                 ├──> Chunk 2 (Evaluate ──> Retrain)
+                                                 └──> Chunk N (Evaluate ──> Retrain)
 ```
 
 When a `time_col` is set, rows are sorted chronologically and split by time - the model trains on the past and is tested on the future. The test stream is then cut into `n_chunks` ordered slices, and two models are compared across them:
@@ -321,7 +289,7 @@ When a `time_col` is set, rows are sorted chronologically and split by time - th
 
 Alongside performance, a **Population Stability Index (PSI)** trajectory tracks whether the *inputs themselves* are shifting, and McNemar/Wilcoxon tests confirm whether the differences are statistically real rather than noise. The gap between the frozen and adaptive curves is a direct, visual answer to "will this model keep working, and do I need to retrain it?"
 
-![Static vs adaptive performance over time](assets/drift_performance.png)
+![Static vs adaptive performance over time](https://raw.githubusercontent.com/Ayush-Gole8/tabml/main/assets/drift_performance.png)
 
 ---
 

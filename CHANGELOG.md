@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.1] - 2026-11-06
+
+### Changed
+- Replaced raw Mermaid diagram code blocks with universal text diagrams for complete rendering support on PyPI.
+- Updated documentation image paths to use absolute CDN URLs for cross-platform asset rendering on PyPI.
+- Streamlined documentation to present the high-level 6-stage AutoML diagnostic flow without internal file implementation clutter.
+
 ## [0.1.0] - 2026-11-06
 
 ### Added
