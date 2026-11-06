@@ -7,14 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.1] - 2026-11-06
+## [0.1.2] - 2026-11-06
 
 ### Changed
 - Refactored project documentation into a formal, enterprise-grade PyPI package specification.
-- Replaced raw Mermaid diagram code blocks with universal text diagrams for complete rendering support on PyPI.
-- Updated documentation image paths to use absolute CDN URLs for cross-platform asset rendering on PyPI.
+- Removed internal academic and assignment references, replacing them with formal methodology citations.
+- Replaced Mermaid diagram code blocks with universal text diagrams for complete rendering support on PyPI.
+- Updated documentation image paths to use absolute GitHub CDN URLs.
+- Corrected package repository and documentation URLs in `pyproject.toml`.
+
+## [0.1.1] - 2026-11-06
+
+### Changed
 - Streamlined documentation to present the high-level 6-stage AutoML diagnostic flow without internal file implementation clutter.
-- Removed internal academic/assignment references and replaced with formal methodology citations.
+- Replaced raw Mermaid diagrams with text-based ASCII flows.
 
 ## [0.1.0] - 2026-11-06
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tabml-guard"
-version = "0.1.1"
+version = "0.1.2"
 description = "A configuration-driven, explainable, drift-aware AutoML pipeline for time-ordered tabular data."
 readme = "README.md"
 license = { file = "LICENSE" }
