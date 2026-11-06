@@ -1,0 +1,33 @@
+{
+  "n_rows": 48204,
+  "n_cols": 9,
+  "target": "traffic_volume",
+  "task": "regression",
+  "n_features": 7,
+  "missing_total": 48143,
+  "columns_with_missing": {
+    "holiday": 48143
+  },
+  "dtypes": {
+    "holiday": "str",
+    "temp": "float64",
+    "rain_1h": "float64",
+    "snow_1h": "float64",
+    "clouds_all": "int64",
+    "weather_main": "str",
+    "weather_description": "str",
+    "date_time": "str",
+    "traffic_volume": "int64"
+  },
+  "target_stats": {
+    "min": 0.0,
+    "max": 7280.0,
+    "mean": 3259.8183553232097,
+    "std": 1986.8606704463589
+  },
+  "time_col": "date_time",
+  "time_span": [
+    "2012-10-02 09:00:00",
+    "2018-09-30 23:00:00"
+  ]
+}

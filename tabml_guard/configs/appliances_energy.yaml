@@ -1,0 +1,50 @@
+# =============================================================================
+# Appliances Energy Prediction  —  REGRESSION, time-ordered, all-numeric
+# A dense, fully numeric feature set (temperatures + humidities from a sensor
+# network) — ideal for showing the PSI drift trajectory and the regularization
+# path, since every input feeds those numeric diagnostics.
+# -----------------------------------------------------------------------------
+# Get the data (free, no login):
+#   UCI ML Repository "Appliances Energy Prediction" (dataset 374). The file is
+#   named energydata_complete.csv; save it as data/appliances_energy.csv so the
+#   report is named after the dataset (report_appliances-energy.html).
+#   Target = Appliances (energy use in Wh). ~19,700 rows at 10-min intervals.
+#   Columns rv1, rv2 are intentional random noise — harmless; leave them in to
+#   see whether the model (and SHAP) correctly ignore them, or add to drop_cols.
+#
+# Run:  python run.py --config configs/appliances_energy.yaml
+# =============================================================================
+
+dataset:
+  source: csv
+  path: data/appliances_energy.csv
+  target: Appliances         # Wh -> continuous -> regression
+  time_col: date             # ISO timestamps -> chronological split + drift
+  use_time_as_feature: false
+  drop_cols: []              # optional: ["rv1", "rv2"] to remove the noise columns
+
+task: auto                   # -> regression
+
+split:
+  train_frac: 0.6
+  test_frac: 0.4
+
+models:
+  boosters: [xgboost, lightgbm, catboost, random_forest]
+  stacking: true
+
+tuning:
+  budget_trials: 40
+  cv_splits: 3
+  scoring: null
+
+drift:
+  n_chunks: 10
+  retrain: sliding
+
+report:
+  title: "TabML-Guard Report — Appliances Energy Prediction"
+  fbeta: 2.0
+
+random_state: 42
+output_dir: results

@@ -3,19 +3,30 @@ __pycache__/
 *.py[cod]
 *.pkl
 
+# Packaging and distribution
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+
 # Virtual environments
 .venv/
 venv/
 env/
 
-# Generated outputs (keep folder structure, ignore contents)
-# results/figures/*
-# results/tables/*
-# !results/figures/.gitkeep
-# !results/tables/.gitkeep
-# # Ignore generated reports, but keep the committed electricity showcase
-# results/report_*.html
-# !results/report_electricity.html
+# Generated outputs. Every run owns a folder: results/<dataset>/{figures,tables}/
+# Ignore the heavy artifacts (figures, saved models) but keep the reports, the
+# per-run metrics JSON and the cross-run index — those are the reviewable record.
+results/*/figures/
+results/*/best_model.pkl
+!results/*/tables/
+!results/*/report_*.pdf
+!results/INDEX.md
+
+# Legacy flat layout from before per-dataset folders
+results/figures/
+results/tables/
+results/best_model.pkl
 
 # Downloaded datasets / OpenML cache
 data/*

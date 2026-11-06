@@ -1,0 +1,34 @@
+{
+  "n_rows": 45312,
+  "n_cols": 9,
+  "target": "class",
+  "task": "classification",
+  "n_features": 7,
+  "missing_total": 0,
+  "columns_with_missing": {},
+  "dtypes": {
+    "date": "float64",
+    "day": "category",
+    "period": "float64",
+    "nswprice": "float64",
+    "nswdemand": "float64",
+    "vicprice": "float64",
+    "vicdemand": "float64",
+    "transfer": "float64",
+    "class": "category"
+  },
+  "class_counts": {
+    "DOWN": 26075,
+    "UP": 19237
+  },
+  "n_classes": 2,
+  "class_balance": {
+    "DOWN": 0.5755,
+    "UP": 0.4245
+  },
+  "time_col": "date",
+  "time_span": [
+    "0.0",
+    "1.0"
+  ]
+}

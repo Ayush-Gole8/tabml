@@ -1,15 +1,16 @@
 # TabML-Guard
 
-![Python](https://img.shields.io/badge/Python-3.10--3.12-3776AB?logo=python&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-0f766e)
-![Status](https://img.shields.io/badge/status-complete-2ea44f)
-![Config-driven](https://img.shields.io/badge/config--driven-yes-14213d)
+[![PyPI](https://img.shields.io/pypi/v/tabml-guard?color=blue)](https://pypi.org/project/tabml-guard/)
+[![Python](https://img.shields.io/badge/Python-3.10--3.12-3776AB?logo=python&logoColor=white)](https://pypi.org/project/tabml-guard/)
+[![License](https://img.shields.io/badge/License-MIT-0f766e)](LICENSE)
+[![CI](https://github.com/Ayush-Gole8/tabml-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/Ayush-Gole8/tabml-guard/actions)
+[![Config-driven](https://img.shields.io/badge/config--driven-yes-14213d)](config.yaml)
 
-**A configuration-driven AutoML pipeline for real-world, time-ordered tabular data - from raw table to a self-contained, explainable, drift-aware HTML report, by editing one file.**
+**An explainable, drift-aware AutoML pipeline and diagnostic framework for real-world, time-ordered tabular data.**
 
-Point TabML-Guard at any tabular dataset (an OpenML name/id or a local CSV), name the target column and an optional time column, and it runs the entire modern supervised-learning workflow end to end: it auto-detects classification vs. regression, splits the data *by time*, fits regularized baselines, trains boosting ensembles and a stacking meta-model, compares four hyperparameter-optimization strategies on **accuracy *and* compute cost**, explains the winning model with SHAP, flags its least-reliable predictions, monitors concept drift over time, runs statistical significance tests, and writes a single self-contained HTML report with a plain-English verdict on top.
+Point TabML-Guard at any tabular dataset (an OpenML name/id, local CSV, or in-memory DataFrame), name the target column and an optional time column, and it runs the entire modern supervised-learning workflow end to end: auto-detects classification vs. regression, splits the data *by time*, fits regularized baselines, trains boosting ensembles and a stacking meta-model, compares four hyperparameter-optimization strategies on **accuracy *and* compute cost**, explains the winning model with SHAP, flags its least-reliable predictions, monitors concept drift over time, runs statistical significance tests, and writes self-contained HTML and PDF diagnostic reports with a plain-English verdict on top.
 
-The **tool is the deliverable**; the datasets are just demonstrations. Nothing in `src/` knows about any specific dataset - every dataset detail lives in the config.
+The **tool is the deliverable**; the datasets are just demonstrations. Nothing in `tabml_guard/` knows about any specific dataset — every dataset detail lives in the config or CLI arguments.
 
 ![TabML-Guard example outputs](assets/sample_outputs.png)
 
@@ -53,41 +54,76 @@ Most tabular ML code is written once, for one dataset, and quietly bakes in assu
 
 Requires **Python 3.10–3.12**.
 
+### From PyPI
 ```bash
-# 1. Clone
-git clone https://github.com/Ayush-Gole8/tabml.git
-cd tabml-guard
-
-# 2. Create and activate a virtual environment
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS / Linux:
-source .venv/bin/activate
-
-# 3. Install dependencies
-pip install -r requirements.txt
+pip install tabml-guard
 ```
 
-Dependencies are grouped by purpose in `requirements.txt`: a core data stack (numpy, pandas, scipy, pyyaml, joblib), the models (scikit-learn, XGBoost, LightGBM, CatBoost), Bayesian tuning (Optuna), explainability (SHAP), drift detectors (`river`, optional), significance testing (statsmodels), and plotting (matplotlib). Anything marked optional degrades gracefully if absent.
+### From Source (Development)
+```bash
+git clone https://github.com/Ayush-Gole8/tabml-guard.git
+cd tabml-guard
+python -m venv .venv
+# Activate:
+.venv\Scripts\activate   # Windows
+source .venv/bin/activate  # macOS / Linux
+
+pip install -e ".[all]"
+```
 
 ---
 
 ## Quickstart
 
-The repository ships ready to run on the ELEC2 electricity dataset, which is pulled straight from OpenML with no download step:
+### 1. Command Line Interface (CLI)
 
+Run TabML-Guard directly on any CSV file:
 ```bash
-python run.py --config config.yaml
+tabml-guard run --data sales.csv --target revenue --time timestamp
 ```
 
-When it finishes, open the report:
-
+Or run using a declarative YAML configuration file (e.g. on the built-in OpenML electricity benchmark):
+```bash
+tabml-guard run --config config.yaml
 ```
-results/report_electricity.html
+
+Scaffold a fresh configuration template in your working directory:
+```bash
+tabml-guard init
 ```
 
-The report filename is derived from the dataset, so running several datasets leaves you one report each (`report_<dataset>.html`) rather than overwriting a single file. A pre-generated example - [`results/report_electricity.html`](results/report_electricity.html) - is committed so you can see the output before running anything.
+### 2. Python Programmatic API
+
+Use TabML-Guard inside your Python scripts or Jupyter Notebooks:
+```python
+import pandas as pd
+from tabml_guard import TabMLGuard
+
+df = pd.read_csv("my_data.csv")
+
+# Initialize and fit
+guard = TabMLGuard(
+    target="churn",
+    time_col="signup_date",  # or None for standard cross-validation
+    task="auto",             # auto-detects classification vs. regression
+    output_dir="audit_results",
+)
+results = guard.fit(df)
+
+# Export interactive HTML and formal PDF reports
+guard.save_report("churn_audit.html", fmt="html")
+guard.save_report("churn_audit.pdf", fmt="pdf")
+
+# Production-ready scikit-learn pipeline (preprocessor + champion model)
+model = guard.get_best_model()
+predictions = guard.predict(df.drop(columns=["churn", "signup_date"]))
+```
+
+When execution completes, inspect the self-contained reports:
+```
+results/electricity/report_electricity.html
+results/electricity/report_electricity.pdf
+```
 
 ---
 
@@ -293,11 +329,11 @@ Alongside performance, a **Population Stability Index (PSI)** trajectory tracks 
 
 Because every stage funnels through one shared `fit_evaluate` path and a typed config, extensions are localized:
 
-- **Add a model / booster** → add a `_build_*` constructor in `src/boosting.py`, register it, and (optionally) add its search space to `src/tuning.py` so it can be tuned.
-- **Add a metric** → extend `classification_metrics` / `regression_metrics` in `src/metrics.py`; every stage picks it up automatically.
-- **Add a tuning strategy** → add a `_run_*` function in `src/tuning.py` following the existing `refit=False` → pick-from-CV → single refit contract, so its cost is measured the same way.
-- **Add a drift detector** → extend `_detect_changes` in `src/drift.py` (the `river` ADWIN hook shows the pattern; it degrades gracefully when the library is absent).
-- **Restyle the report** → it's pure-stdlib string assembly in `src/report.py`; no template engine to learn.
+- **Add a model / booster** → add a `_build_*` constructor in `tabml_guard/boosting.py`, register it, and (optionally) add its search space to `tabml_guard/tuning.py` so it can be tuned.
+- **Add a metric** → extend `classification_metrics` / `regression_metrics` in `tabml_guard/metrics.py`; every stage picks it up automatically.
+- **Add a tuning strategy** → add a `_run_*` function in `tabml_guard/tuning.py` following the existing `refit=False` → pick-from-CV → single refit contract, so its cost is measured the same way.
+- **Add a drift detector** → extend `_detect_changes` in `tabml_guard/drift.py` (the `river` ADWIN hook shows the pattern; it degrades gracefully when the library is absent).
+- **Restyle the report** → it's pure-stdlib string assembly in `tabml_guard/report.py`; no template engine to learn.
 
 ---
 
@@ -305,11 +341,17 @@ Because every stage funnels through one shared `fit_evaluate` path and a typed c
 
 ```
 tabml-guard/
-├── config.yaml            # the one file you edit per dataset (electricity demo)
-├── configs/               # five ready-to-run example datasets
-├── requirements.txt
-├── run.py                 # entry point - orchestrates the six stages
-├── src/
+├── pyproject.toml         # PEP 517/518 build specification & dependencies
+├── CHANGELOG.md           # version history & release notes
+├── LICENSE                # MIT license
+├── config.yaml            # reference configuration (electricity benchmark)
+├── configs/               # ready-to-run configurations for multiple tabular regimes
+├── tabml_guard/           # THE official installable Python package
+│   ├── __init__.py        # public API (TabMLGuard, load_config, Config)
+│   ├── __version__.py     # single source of version truth (0.1.0)
+│   ├── py.typed           # PEP 561 typing marker for IDEs & mypy
+│   ├── cli.py             # CLI entry point (tabml-guard run/init/index/version)
+│   ├── pipeline.py        # TabMLGuard class (high-level Python API)
 │   ├── config.py          # load + validate config into typed dataclasses
 │   ├── data.py            # S0: load, profile, task-detect, preprocess, temporal split
 │   ├── modeling.py        # shared fit/evaluate core (single source of truth)
@@ -321,12 +363,22 @@ tabml-guard/
 │   ├── drift.py           # S5: prequential drift + PSI + retraining
 │   ├── stats.py           # McNemar's / Wilcoxon significance tests
 │   ├── plots.py           # headless matplotlib figure helpers
-│   └── report.py          # self-contained HTML report assembly
-├── assets/                # README images
-├── results/               # generated: report, figures, tables, best_model.pkl
-├── DATASETS.md            # guide to running on other datasets
-├── PROJECT_PLAN.md        # full design rationale + per-stage paper mapping
-└── EVALUATION_PREP.md     # deep-dive walkthrough (layman → technical)
+│   ├── paths.py           # isolated output paths per dataset
+│   ├── report.py          # self-contained HTML report assembly
+│   ├── pdf_report.py      # publication-quality PDF report generation
+│   └── configs/           # packaged configuration templates
+├── tests/                 # automated unit & smoke test suite
+│   ├── conftest.py        # synthetic dataset fixtures
+│   ├── test_config.py     # configuration validation tests
+│   ├── test_data.py       # task detection & temporal split tests
+│   └── test_pipeline.py   # end-to-end pipeline execution test
+├── .github/
+│   └── workflows/
+│       ├── ci.yml         # GitHub Actions linting & matrix testing
+│       └── publish.yml    # PyPI automated release workflow
+├── run.py                 # backwards-compatible entry point
+├── make_index.py          # backwards-compatible results indexer
+└── results/               # generated benchmark reports, models, and figures
 ```
 
 ---

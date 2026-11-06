@@ -3,10 +3,19 @@
 Usage:
     python run.py --config config.yaml
 
-Reads the config, runs the pipeline stage by stage, and writes results/report.html.
-All stages are live: Stage 0 (data/profiling/temporal split), Stage 1 (regularized
-baselines), Stage 2 (boosting + stacking), Stage 3 (HPO comparison), Stage 4 (SHAP +
-reliability), Stage 5 (concept-drift monitoring + significance tests).
+Reads the config, runs the pipeline stage by stage, and writes a professional PDF
+report. All stages are live: Stage 0 (data/profiling/temporal split), Stage 1
+(regularized baselines), Stage 2 (boosting + stacking), Stage 3 (HPO comparison),
+Stage 4 (SHAP + reliability), Stage 5 (concept-drift monitoring + significance tests).
+
+Every run writes into its own per-dataset directory so results from different
+configs never overwrite one another::
+
+    results/<dataset>/
+        report_<dataset>.pdf     <- the deliverable
+        best_model.pkl
+        figures/*.png
+        tables/{profile,results}.json
 """
 from __future__ import annotations
 
@@ -15,19 +24,19 @@ import json
 import sys
 from pathlib import Path
 
-from src import baselines, boosting, drift, explain, report, tuning
-from src.config import load_config
-from src.data import prepare
+from tabml_guard import baselines, boosting, drift, explain, paths, pdf_report, report, tuning
+from tabml_guard.config import load_config
+from tabml_guard.data import prepare
 
 
 def _banner(msg: str) -> None:
     print("\n" + "=" * 70 + f"\n{msg}\n" + "=" * 70)
 
 
-def _save_json(obj: dict, output_dir: str, name: str) -> None:
-    tables = Path(output_dir) / "tables"
-    tables.mkdir(parents=True, exist_ok=True)
-    (tables / f"{name}.json").write_text(json.dumps(obj, indent=2), encoding="utf-8")
+def _save_json(obj: dict, cfg, name: str) -> None:
+    """Write a JSON-safe dict into this run's tables/ directory."""
+    (paths.tables_dir(cfg) / f"{name}.json").write_text(
+        json.dumps(obj, indent=2), encoding="utf-8")
 
 
 def _print_leaderboard(stage_summary: dict, primary_metric: str) -> None:
@@ -54,7 +63,7 @@ def _print_significance(drift_summary: dict) -> None:
         print(f"   - {label}: {r.get('better_model')} better  (p={p_txt}, {mark})")
 
 
-def _save_best_model(ctx: dict, output_dir: str) -> None:
+def _save_best_model(ctx: dict, cfg) -> None:
     """Persist the best fitted pipeline so it can be reused/deployed."""
     best = ctx.get("best_overall")
     if best is None:
@@ -62,8 +71,7 @@ def _save_best_model(ctx: dict, output_dir: str) -> None:
     try:
         import joblib
 
-        path = Path(output_dir) / "best_model.pkl"
-        path.parent.mkdir(parents=True, exist_ok=True)
+        path = paths.model_path(cfg)
         joblib.dump(best.estimator, path)
         print(f"[model] saved best model '{best.name}' -> {path}")
     except Exception as exc:
@@ -77,11 +85,13 @@ def main(argv=None) -> int:
 
     cfg = load_config(args.config)
     _banner(f"TabML-Guard  |  {cfg.report.title}")
+    run_out = paths.run_dir(cfg)
+    print(f"[paths] this run writes into: {run_out}")
 
     # ----- Stage 0: data -----------------------------------------------------
     _banner("Stage 0 — Data ingestion, profiling & temporal split")
     bundle = prepare(cfg)
-    _save_json(bundle.profile, cfg.output_dir, "profile")
+    _save_json(bundle.profile, cfg, "profile")
 
     prof = bundle.profile
     print(f"\n[summary] rows={prof['n_rows']:,}  features={prof['n_features']}  task={bundle.task}")
@@ -133,17 +143,21 @@ def main(argv=None) -> int:
     _print_significance(report_ctx["drift"])
 
     # Persist the best fitted model + a JSON-safe run summary.
-    _save_best_model(ctx, cfg.output_dir)
-    _save_json(report_ctx, cfg.output_dir, "results")
+    _save_best_model(ctx, cfg)
+    _save_json(report_ctx, cfg, "results")
 
     # ----- Report ------------------------------------------------------------
-    _banner("Building report")
-    report_path = report.build(report_ctx, cfg.output_dir, cfg.report.title, cfg=cfg)
-    print(f"[report] written to: {report_path}")
+    _banner("Building Reports (PDF & HTML)")
+    pdf_path = pdf_report.build(report_ctx, str(run_out), cfg.report.title, cfg=cfg)
+    html_path = report.build(report_ctx, str(run_out), cfg.report.title, cfg=cfg)
+    print(f"[report] PDF:  {pdf_path}")
+    print(f"[report] HTML: {html_path}")
 
     _banner("Done")
     print("Pipeline complete: baselines -> ensembles -> HPO -> SHAP/reliability -> drift/significance.")
-    print(f"Open the report: {report_path}")
+    print(f"Interactive HTML: {html_path}")
+    print(f"Document PDF:     {pdf_path}")
+    print(f"All artifacts for this dataset: {run_out}")
     return 0
 
 

@@ -1,0 +1,37 @@
+# =============================================================================
+# TabML-Guard configuration template
+# =============================================================================
+dataset:
+  source: csv               # 'csv' | 'openml'
+  path: data/my_data.csv    # Path to CSV file
+  target: target_column     # Column to predict (required)
+  time_col: null            # Column for chronological ordering (null for random split)
+  use_time_as_feature: false
+  drop_cols: []             # Columns to drop (e.g. IDs, leakage)
+
+task: auto                  # 'auto' | 'classification' | 'regression'
+
+split:
+  train_frac: 0.6
+  test_frac: 0.4
+
+models:
+  boosters: [xgboost, lightgbm, catboost, random_forest]
+  stacking: true
+
+tuning:
+  budget_trials: 40
+  cv_splits: 3
+  scoring: null
+
+drift:
+  n_chunks: 10
+  retrain: sliding
+
+report:
+  title: "TabML-Guard Audit Report"
+  fbeta: 2.0
+
+random_state: 42
+output_dir: results
+

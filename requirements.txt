@@ -27,7 +27,9 @@ river>=0.21
 # --- Statistical significance testing ---
 statsmodels>=0.14
 
-# --- Plots & HTML report ---
+# --- Plots ---
 matplotlib>=3.7
 seaborn>=0.12
-jinja2>=3.1
+
+# --- PDF report (uses only the base-14 Type 1 fonts, so nothing to embed) ---
+reportlab>=4.0

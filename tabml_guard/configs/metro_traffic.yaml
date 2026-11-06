@@ -1,0 +1,49 @@
+# =============================================================================
+# Metro Interstate Traffic Volume  —  REGRESSION, time-ordered
+# Proves task auto-detection: the same pipeline switches to RMSE/MAE/R2,
+# a Wilcoxon signed-rank test (instead of McNemar), and drops the
+# classification-only confidence-triage layer — all from one config change.
+# -----------------------------------------------------------------------------
+# Get the data (free, no login):
+#   UCI ML Repository "Metro Interstate Traffic Volume" (dataset 492).
+#   Save the single file as data/metro_traffic.csv.
+#   Columns: holiday, temp, rain_1h, snow_1h, clouds_all, weather_main,
+#            weather_description, date_time, traffic_volume.
+#   The three text columns are all low-cardinality (<50), so one-hot is fine.
+#
+# Run:  python run.py --config configs/metro_traffic.yaml
+# =============================================================================
+
+dataset:
+  source: csv
+  path: data/metro_traffic.csv
+  target: traffic_volume     # cars/hour -> continuous -> regression
+  time_col: date_time        # ISO timestamps -> chronological split + drift
+  use_time_as_feature: false
+  drop_cols: []
+
+task: auto                   # -> regression (target is continuous)
+
+split:
+  train_frac: 0.6
+  test_frac: 0.4
+
+models:
+  boosters: [xgboost, lightgbm, catboost, random_forest]
+  stacking: true
+
+tuning:
+  budget_trials: 40
+  cv_splits: 3
+  scoring: null
+
+drift:
+  n_chunks: 10
+  retrain: sliding
+
+report:
+  title: "TabML-Guard Report — Metro Interstate Traffic Volume"
+  fbeta: 2.0
+
+random_state: 42
+output_dir: results

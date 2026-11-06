@@ -1,0 +1,93 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tabml-guard"
+version = "0.1.0"
+description = "A configuration-driven, explainable, drift-aware AutoML pipeline for time-ordered tabular data."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Ayush Gole", email = "ayushgole1910@gmail.com" },
+]
+keywords = [
+    "automl",
+    "machine-learning",
+    "tabular",
+    "concept-drift",
+    "explainability",
+    "shap",
+    "hyperparameter-optimization",
+    "time-series",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    "pyyaml>=6.0",
+    "joblib>=1.3",
+    "scikit-learn>=1.3",
+    "xgboost>=2.0",
+    "lightgbm>=4.0",
+    "catboost>=1.2",
+    "optuna>=3.4",
+    "shap>=0.44",
+    "statsmodels>=0.14",
+    "matplotlib>=3.7",
+    "seaborn>=0.12",
+    "reportlab>=4.0",
+]
+
+[project.optional-dependencies]
+drift = ["river>=0.21"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "ruff>=0.4",
+    "mypy>=1.8",
+    "build",
+    "twine",
+]
+all = ["tabml-guard[drift,dev]"]
+
+[project.urls]
+Homepage = "https://github.com/Ayush-Gole8/tabml-guard"
+Repository = "https://github.com/Ayush-Gole8/tabml-guard"
+Documentation = "https://github.com/Ayush-Gole8/tabml-guard#readme"
+"Bug Tracker" = "https://github.com/Ayush-Gole8/tabml-guard/issues"
+
+[project.scripts]
+tabml-guard = "tabml_guard.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tabml_guard*"]
+
+[tool.setuptools.package-data]
+tabml_guard = ["py.typed", "configs/*.yaml"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "RUF"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

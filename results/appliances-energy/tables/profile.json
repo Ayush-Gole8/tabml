@@ -1,0 +1,51 @@
+{
+  "n_rows": 19735,
+  "n_cols": 29,
+  "target": "Appliances",
+  "task": "regression",
+  "n_features": 27,
+  "missing_total": 0,
+  "columns_with_missing": {},
+  "dtypes": {
+    "date": "str",
+    "Appliances": "int64",
+    "lights": "int64",
+    "T1": "float64",
+    "RH_1": "float64",
+    "T2": "float64",
+    "RH_2": "float64",
+    "T3": "float64",
+    "RH_3": "float64",
+    "T4": "float64",
+    "RH_4": "float64",
+    "T5": "float64",
+    "RH_5": "float64",
+    "T6": "float64",
+    "RH_6": "float64",
+    "T7": "float64",
+    "RH_7": "float64",
+    "T8": "float64",
+    "RH_8": "float64",
+    "T9": "float64",
+    "RH_9": "float64",
+    "T_out": "float64",
+    "Press_mm_hg": "float64",
+    "RH_out": "float64",
+    "Windspeed": "float64",
+    "Visibility": "float64",
+    "Tdewpoint": "float64",
+    "rv1": "float64",
+    "rv2": "float64"
+  },
+  "target_stats": {
+    "min": 10.0,
+    "max": 1080.0,
+    "mean": 97.6949581960983,
+    "std": 102.52489053740624
+  },
+  "time_col": "date",
+  "time_span": [
+    "2016-01-11 17:00:00",
+    "2016-05-27 18:00:00"
+  ]
+}

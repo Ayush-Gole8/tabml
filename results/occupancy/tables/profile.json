@@ -1,0 +1,32 @@
+{
+  "n_rows": 20559,
+  "n_cols": 7,
+  "target": "Occupancy",
+  "task": "classification",
+  "n_features": 5,
+  "missing_total": 0,
+  "columns_with_missing": {},
+  "dtypes": {
+    "date": "str",
+    "Temperature": "float64",
+    "Humidity": "float64",
+    "Light": "float64",
+    "CO2": "float64",
+    "HumidityRatio": "float64",
+    "Occupancy": "int64"
+  },
+  "class_counts": {
+    "0": 15810,
+    "1": 4749
+  },
+  "n_classes": 2,
+  "class_balance": {
+    "0": 0.769,
+    "1": 0.231
+  },
+  "time_col": "date",
+  "time_span": [
+    "2015-02-02 14:19:00",
+    "2015-02-18 09:19:00"
+  ]
+}

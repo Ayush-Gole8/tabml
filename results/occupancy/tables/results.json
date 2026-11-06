@@ -1,0 +1,1347 @@
+{
+  "profile": {
+    "n_rows": 20559,
+    "n_cols": 7,
+    "target": "Occupancy",
+    "task": "classification",
+    "n_features": 5,
+    "missing_total": 0,
+    "columns_with_missing": {},
+    "dtypes": {
+      "date": "str",
+      "Temperature": "float64",
+      "Humidity": "float64",
+      "Light": "float64",
+      "CO2": "float64",
+      "HumidityRatio": "float64",
+      "Occupancy": "int64"
+    },
+    "class_counts": {
+      "0": 15810,
+      "1": 4749
+    },
+    "n_classes": 2,
+    "class_balance": {
+      "0": 0.769,
+      "1": 0.231
+    },
+    "time_col": "date",
+    "time_span": [
+      "2015-02-02 14:19:00",
+      "2015-02-18 09:19:00"
+    ]
+  },
+  "task": "classification",
+  "baselines": {
+    "status": "ok",
+    "stage": "baselines",
+    "primary_metric": "roc_auc",
+    "best": "logreg_none",
+    "models": [
+      {
+        "name": "logreg_none",
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9967267362323904,
+          "pr_auc": 0.9812929865492312
+        },
+        "fit_seconds": 0.016,
+        "extra": {
+          "coefficients": {
+            "n_coefficients": 5,
+            "n_zero": 0,
+            "sparsity": 0.0,
+            "l1_norm": 22.50994,
+            "l2_norm": 11.05675,
+            "top_features": [
+              [
+                "num__HumidityRatio",
+                6.91768
+              ],
+              [
+                "num__Humidity",
+                -6.3774
+              ],
+              [
+                "num__Light",
+                4.40487
+              ],
+              [
+                "num__Temperature",
+                -3.57871
+              ],
+              [
+                "num__CO2",
+                1.23128
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "name": "logreg_l2",
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966901705670044,
+          "pr_auc": 0.9811180202709399
+        },
+        "fit_seconds": 0.015,
+        "extra": {
+          "coefficients": {
+            "n_coefficients": 5,
+            "n_zero": 0,
+            "sparsity": 0.0,
+            "l1_norm": 8.97476,
+            "l2_norm": 4.95082,
+            "top_features": [
+              [
+                "num__Light",
+                4.3479
+              ],
+              [
+                "num__Temperature",
+                -1.43215
+              ],
+              [
+                "num__CO2",
+                1.31611
+              ],
+              [
+                "num__HumidityRatio",
+                1.11052
+              ],
+              [
+                "num__Humidity",
+                -0.76808
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "name": "logreg_l1",
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966886242577716,
+          "pr_auc": 0.9810810527954948
+        },
+        "fit_seconds": 0.016,
+        "extra": {
+          "coefficients": {
+            "n_coefficients": 5,
+            "n_zero": 0,
+            "sparsity": 0.0,
+            "l1_norm": 7.28382,
+            "l2_norm": 4.77981,
+            "top_features": [
+              [
+                "num__Light",
+                4.42331
+              ],
+              [
+                "num__CO2",
+                1.33692
+              ],
+              [
+                "num__Temperature",
+                -1.17348
+              ],
+              [
+                "num__HumidityRatio",
+                0.34121
+              ],
+              [
+                "num__Humidity",
+                -0.0089
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "name": "logreg_elasticnet",
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966913530387704,
+          "pr_auc": 0.9811111967559354
+        },
+        "fit_seconds": 0.068,
+        "extra": {
+          "coefficients": {
+            "n_coefficients": 5,
+            "n_zero": 0,
+            "sparsity": 0.0,
+            "l1_norm": 8.49896,
+            "l2_norm": 4.8895,
+            "top_features": [
+              [
+                "num__Light",
+                4.38444
+              ],
+              [
+                "num__Temperature",
+                -1.36038
+              ],
+              [
+                "num__CO2",
+                1.32321
+              ],
+              [
+                "num__HumidityRatio",
+                0.88665
+              ],
+              [
+                "num__Humidity",
+                -0.54428
+              ]
+            ]
+          }
+        }
+      }
+    ],
+    "leaderboard": [
+      {
+        "name": "logreg_none",
+        "primary": 0.9967267362323904,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9967267362323904,
+          "pr_auc": 0.9812929865492312
+        },
+        "fit_seconds": 0.016
+      },
+      {
+        "name": "logreg_elasticnet",
+        "primary": 0.9966913530387704,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966913530387704,
+          "pr_auc": 0.9811111967559354
+        },
+        "fit_seconds": 0.068
+      },
+      {
+        "name": "logreg_l2",
+        "primary": 0.9966901705670044,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966901705670044,
+          "pr_auc": 0.9811180202709399
+        },
+        "fit_seconds": 0.015
+      },
+      {
+        "name": "logreg_l1",
+        "primary": 0.9966886242577716,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966886242577716,
+          "pr_auc": 0.9810810527954948
+        },
+        "fit_seconds": 0.016
+      }
+    ],
+    "learning_curve": {
+      "model": "logreg_none",
+      "metric": "roc_auc",
+      "train_sizes": [
+        308,
+        1002,
+        1697,
+        2391,
+        3086
+      ],
+      "train_mean": [
+        0.9901,
+        0.9987,
+        0.9937,
+        0.9957,
+        0.9948
+      ],
+      "val_mean": [
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN
+      ]
+    },
+    "regularization_path": {
+      "type": "classification",
+      "C": [
+        0.001,
+        0.002848,
+        0.008111,
+        0.023101,
+        0.065793,
+        0.187382,
+        0.53367,
+        1.519911,
+        4.328761,
+        12.328467,
+        35.111917,
+        100.0
+      ],
+      "l1": {
+        "nonzero": [
+          2,
+          2,
+          2,
+          3,
+          3,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "l2norm": [
+          1.62074,
+          2.32562,
+          2.93497,
+          3.60832,
+          4.18816,
+          4.54179,
+          4.70365,
+          4.9417,
+          6.93372,
+          7.93015,
+          8.27325,
+          8.3978
+        ],
+        "val_roc_auc": [
+          0.996,
+          0.9962,
+          0.9964,
+          0.9956,
+          0.9939,
+          0.9928,
+          0.9918,
+          0.9915,
+          0.9915,
+          0.9915,
+          0.9914,
+          0.9914
+        ]
+      },
+      "l2": {
+        "nonzero": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "l2norm": [
+          1.25017,
+          1.80015,
+          2.44251,
+          3.14293,
+          3.80256,
+          4.29469,
+          4.62389,
+          5.01175,
+          5.89387,
+          7.25706,
+          8.33274,
+          8.89798
+        ],
+        "val_roc_auc": [
+          0.9785,
+          0.9919,
+          0.9957,
+          0.9952,
+          0.9932,
+          0.9923,
+          0.9918,
+          0.9914,
+          0.9913,
+          0.9913,
+          0.9912,
+          0.9914
+        ]
+      },
+      "n_features": 5
+    },
+    "note": "the 4 regularizers span only 0.0000 roc_auc (best 'logreg_none' 0.9967) \u2014 with abundant rows and few features, penalties barely move the fit at the default strength; L1 path: at C=0.001 only 2/5 features survive (sparsity), rising to 5/5 as C grows"
+  },
+  "boosting": {
+    "status": "ok",
+    "stage": "boosting",
+    "primary_metric": "roc_auc",
+    "available_boosters": [
+      "xgboost",
+      "lightgbm",
+      "catboost",
+      "random_forest"
+    ],
+    "skipped_boosters": [],
+    "best": "random_forest",
+    "best_booster": "random_forest",
+    "best_overall": "random_forest",
+    "models": [
+      {
+        "name": "xgboost",
+        "metrics": {
+          "accuracy": 0.9671692607003891,
+          "precision": 0.8622816032887975,
+          "recall": 0.9988095238095238,
+          "f1": 0.9255377826806398,
+          "f2": 0.9681513962612509,
+          "roc_auc": 0.9934393282832694,
+          "pr_auc": 0.9655803160658893
+        },
+        "fit_seconds": 0.297,
+        "extra": {
+          "importance": {
+            "top_features": [
+              [
+                "num__Light",
+                0.75489
+              ],
+              [
+                "num__CO2",
+                0.14388
+              ],
+              [
+                "num__Temperature",
+                0.03814
+              ],
+              [
+                "num__Humidity",
+                0.0349
+              ],
+              [
+                "num__HumidityRatio",
+                0.02819
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "name": "lightgbm",
+        "metrics": {
+          "accuracy": 0.9630350194552529,
+          "precision": 0.8474747474747475,
+          "recall": 0.9988095238095238,
+          "f1": 0.9169398907103825,
+          "f2": 0.964367816091954,
+          "roc_auc": 0.9890293907905461,
+          "pr_auc": 0.9436432853064776
+        },
+        "fit_seconds": 0.514,
+        "extra": {
+          "importance": {
+            "top_features": [
+              [
+                "num__Light",
+                2255.0
+              ],
+              [
+                "num__CO2",
+                2102.0
+              ],
+              [
+                "num__Humidity",
+                1773.0
+              ],
+              [
+                "num__Temperature",
+                1687.0
+              ],
+              [
+                "num__HumidityRatio",
+                1183.0
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "name": "catboost",
+        "metrics": {
+          "accuracy": 0.9826118677042801,
+          "precision": 0.9224848818031886,
+          "recall": 0.9988095238095238,
+          "f1": 0.9591311803372392,
+          "f2": 0.9825506499590116,
+          "roc_auc": 0.9964635453050412,
+          "pr_auc": 0.9819754347632199
+        },
+        "fit_seconds": 1.61,
+        "extra": {
+          "importance": {
+            "top_features": [
+              [
+                "num__Light",
+                44.57107
+              ],
+              [
+                "num__CO2",
+                19.77322
+              ],
+              [
+                "num__Temperature",
+                15.54607
+              ],
+              [
+                "num__Humidity",
+                10.41738
+              ],
+              [
+                "num__HumidityRatio",
+                9.69227
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "name": "random_forest",
+        "metrics": {
+          "accuracy": 0.984557392996109,
+          "precision": 0.9321090706733445,
+          "recall": 0.9970238095238095,
+          "f1": 0.9634742594190394,
+          "f2": 0.9833274627216156,
+          "roc_auc": 0.9970190796367446,
+          "pr_auc": 0.9804871532294209
+        },
+        "fit_seconds": 0.45,
+        "extra": {
+          "importance": {
+            "top_features": [
+              [
+                "num__Light",
+                0.6387
+              ],
+              [
+                "num__CO2",
+                0.21392
+              ],
+              [
+                "num__Temperature",
+                0.0908
+              ],
+              [
+                "num__HumidityRatio",
+                0.03728
+              ],
+              [
+                "num__Humidity",
+                0.0193
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "name": "stacking",
+        "metrics": {
+          "accuracy": 0.9795719844357976,
+          "precision": 0.9099783080260304,
+          "recall": 0.9988095238095238,
+          "f1": 0.9523269012485811,
+          "f2": 0.9796823914058851,
+          "roc_auc": 0.9968714980643847,
+          "pr_auc": 0.9808751374927286
+        },
+        "fit_seconds": 9.215
+      }
+    ],
+    "leaderboard": [
+      {
+        "name": "random_forest",
+        "primary": 0.9970190796367446,
+        "metrics": {
+          "accuracy": 0.984557392996109,
+          "precision": 0.9321090706733445,
+          "recall": 0.9970238095238095,
+          "f1": 0.9634742594190394,
+          "f2": 0.9833274627216156,
+          "roc_auc": 0.9970190796367446,
+          "pr_auc": 0.9804871532294209
+        },
+        "fit_seconds": 0.45
+      },
+      {
+        "name": "stacking",
+        "primary": 0.9968714980643847,
+        "metrics": {
+          "accuracy": 0.9795719844357976,
+          "precision": 0.9099783080260304,
+          "recall": 0.9988095238095238,
+          "f1": 0.9523269012485811,
+          "f2": 0.9796823914058851,
+          "roc_auc": 0.9968714980643847,
+          "pr_auc": 0.9808751374927286
+        },
+        "fit_seconds": 9.215
+      },
+      {
+        "name": "logreg_none",
+        "primary": 0.9967267362323904,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9967267362323904,
+          "pr_auc": 0.9812929865492312
+        },
+        "fit_seconds": 0.016
+      },
+      {
+        "name": "logreg_elasticnet",
+        "primary": 0.9966913530387704,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966913530387704,
+          "pr_auc": 0.9811111967559354
+        },
+        "fit_seconds": 0.068
+      },
+      {
+        "name": "logreg_l2",
+        "primary": 0.9966901705670044,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966901705670044,
+          "pr_auc": 0.9811180202709399
+        },
+        "fit_seconds": 0.015
+      },
+      {
+        "name": "logreg_l1",
+        "primary": 0.9966886242577716,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966886242577716,
+          "pr_auc": 0.9810810527954948
+        },
+        "fit_seconds": 0.016
+      },
+      {
+        "name": "catboost",
+        "primary": 0.9964635453050412,
+        "metrics": {
+          "accuracy": 0.9826118677042801,
+          "precision": 0.9224848818031886,
+          "recall": 0.9988095238095238,
+          "f1": 0.9591311803372392,
+          "f2": 0.9825506499590116,
+          "roc_auc": 0.9964635453050412,
+          "pr_auc": 0.9819754347632199
+        },
+        "fit_seconds": 1.61
+      },
+      {
+        "name": "xgboost",
+        "primary": 0.9934393282832694,
+        "metrics": {
+          "accuracy": 0.9671692607003891,
+          "precision": 0.8622816032887975,
+          "recall": 0.9988095238095238,
+          "f1": 0.9255377826806398,
+          "f2": 0.9681513962612509,
+          "roc_auc": 0.9934393282832694,
+          "pr_auc": 0.9655803160658893
+        },
+        "fit_seconds": 0.297
+      },
+      {
+        "name": "lightgbm",
+        "primary": 0.9890293907905461,
+        "metrics": {
+          "accuracy": 0.9630350194552529,
+          "precision": 0.8474747474747475,
+          "recall": 0.9988095238095238,
+          "f1": 0.9169398907103825,
+          "f2": 0.964367816091954,
+          "roc_auc": 0.9890293907905461,
+          "pr_auc": 0.9436432853064776
+        },
+        "fit_seconds": 0.514
+      }
+    ]
+  },
+  "tuning": {
+    "status": "ok",
+    "stage": "tuning",
+    "booster": "random_forest",
+    "scoring": "roc_auc",
+    "cv_splits": 3,
+    "primary_metric": "roc_auc",
+    "budget_trials": 40,
+    "records": [
+      {
+        "strategy": "default",
+        "best_params": {},
+        "cv_score": null,
+        "n_candidates": 1,
+        "n_evaluations": 1,
+        "wall_seconds": 1.09
+      },
+      {
+        "strategy": "grid",
+        "best_params": {
+          "max_depth": 8,
+          "max_features": "sqrt",
+          "min_samples_leaf": 1
+        },
+        "cv_score": NaN,
+        "n_candidates": 18,
+        "n_evaluations": 54,
+        "wall_seconds": 5.17
+      },
+      {
+        "strategy": "random",
+        "best_params": {
+          "max_depth": 10,
+          "max_features": "log2",
+          "min_samples_leaf": 15
+        },
+        "cv_score": NaN,
+        "n_candidates": 40,
+        "n_evaluations": 120,
+        "wall_seconds": 7.94
+      },
+      {
+        "strategy": "bayes",
+        "best_params": {
+          "max_depth": 4,
+          "min_samples_leaf": 9,
+          "max_features": "log2"
+        },
+        "cv_score": 0.98555,
+        "n_candidates": 40,
+        "n_evaluations": 120,
+        "wall_seconds": 27.78
+      }
+    ],
+    "best_strategy": "bayes",
+    "tuned_best": "random_forest_bayes",
+    "leaderboard": [
+      {
+        "name": "random_forest_bayes",
+        "primary": 0.9976264153277449,
+        "metrics": {
+          "accuracy": 0.9936770428015564,
+          "precision": 0.9732558139534884,
+          "recall": 0.9964285714285714,
+          "f1": 0.9847058823529412,
+          "f2": 0.9917061611374408,
+          "roc_auc": 0.9976264153277449,
+          "pr_auc": 0.989265464977153
+        },
+        "fit_seconds": 0.702
+      },
+      {
+        "name": "random_forest_random",
+        "primary": 0.9974416313744325,
+        "metrics": {
+          "accuracy": 0.9936770428015564,
+          "precision": 0.9732558139534884,
+          "recall": 0.9964285714285714,
+          "f1": 0.9847058823529412,
+          "f2": 0.9917061611374408,
+          "roc_auc": 0.9974416313744325,
+          "pr_auc": 0.9869014516804623
+        },
+        "fit_seconds": 0.915
+      },
+      {
+        "name": "random_forest_grid",
+        "primary": 0.9974023369280475,
+        "metrics": {
+          "accuracy": 0.9852869649805448,
+          "precision": 0.9347462353597323,
+          "recall": 0.9976190476190476,
+          "f1": 0.9651598042038584,
+          "f2": 0.9843768354281687,
+          "roc_auc": 0.9974023369280475,
+          "pr_auc": 0.9858323242791948
+        },
+        "fit_seconds": 0.971
+      },
+      {
+        "name": "random_forest",
+        "primary": 0.9970190796367446,
+        "metrics": {
+          "accuracy": 0.984557392996109,
+          "precision": 0.9321090706733445,
+          "recall": 0.9970238095238095,
+          "f1": 0.9634742594190394,
+          "f2": 0.9833274627216156,
+          "roc_auc": 0.9970190796367446,
+          "pr_auc": 0.9804871532294209
+        },
+        "fit_seconds": 0.45
+      },
+      {
+        "name": "stacking",
+        "primary": 0.9968714980643847,
+        "metrics": {
+          "accuracy": 0.9795719844357976,
+          "precision": 0.9099783080260304,
+          "recall": 0.9988095238095238,
+          "f1": 0.9523269012485811,
+          "f2": 0.9796823914058851,
+          "roc_auc": 0.9968714980643847,
+          "pr_auc": 0.9808751374927286
+        },
+        "fit_seconds": 9.215
+      },
+      {
+        "name": "random_forest_default",
+        "primary": 0.9968067804750261,
+        "metrics": {
+          "accuracy": 0.9849221789883269,
+          "precision": 0.933184855233853,
+          "recall": 0.9976190476190476,
+          "f1": 0.9643268124280783,
+          "f2": 0.9840300610615312,
+          "roc_auc": 0.9968067804750261,
+          "pr_auc": 0.9783169501507571
+        },
+        "fit_seconds": 1.029
+      },
+      {
+        "name": "logreg_none",
+        "primary": 0.9967267362323904,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9967267362323904,
+          "pr_auc": 0.9812929865492312
+        },
+        "fit_seconds": 0.016
+      },
+      {
+        "name": "logreg_elasticnet",
+        "primary": 0.9966913530387704,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966913530387704,
+          "pr_auc": 0.9811111967559354
+        },
+        "fit_seconds": 0.068
+      },
+      {
+        "name": "logreg_l2",
+        "primary": 0.9966901705670044,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966901705670044,
+          "pr_auc": 0.9811180202709399
+        },
+        "fit_seconds": 0.015
+      },
+      {
+        "name": "logreg_l1",
+        "primary": 0.9966886242577716,
+        "metrics": {
+          "accuracy": 0.99306906614786,
+          "precision": 0.9704347826086956,
+          "recall": 0.9964285714285714,
+          "f1": 0.9832599118942731,
+          "f2": 0.9911190053285968,
+          "roc_auc": 0.9966886242577716,
+          "pr_auc": 0.9810810527954948
+        },
+        "fit_seconds": 0.016
+      },
+      {
+        "name": "catboost",
+        "primary": 0.9964635453050412,
+        "metrics": {
+          "accuracy": 0.9826118677042801,
+          "precision": 0.9224848818031886,
+          "recall": 0.9988095238095238,
+          "f1": 0.9591311803372392,
+          "f2": 0.9825506499590116,
+          "roc_auc": 0.9964635453050412,
+          "pr_auc": 0.9819754347632199
+        },
+        "fit_seconds": 1.61
+      },
+      {
+        "name": "xgboost",
+        "primary": 0.9934393282832694,
+        "metrics": {
+          "accuracy": 0.9671692607003891,
+          "precision": 0.8622816032887975,
+          "recall": 0.9988095238095238,
+          "f1": 0.9255377826806398,
+          "f2": 0.9681513962612509,
+          "roc_auc": 0.9934393282832694,
+          "pr_auc": 0.9655803160658893
+        },
+        "fit_seconds": 0.297
+      },
+      {
+        "name": "lightgbm",
+        "primary": 0.9890293907905461,
+        "metrics": {
+          "accuracy": 0.9630350194552529,
+          "precision": 0.8474747474747475,
+          "recall": 0.9988095238095238,
+          "f1": 0.9169398907103825,
+          "f2": 0.964367816091954,
+          "roc_auc": 0.9890293907905461,
+          "pr_auc": 0.9436432853064776
+        },
+        "fit_seconds": 0.514
+      }
+    ],
+    "verdict": "best tuner 'bayes' reached roc_auc=0.9976 vs default 0.9968 (+0.0008); at equal budget, Bayesian search won (roc_auc: bayes 0.9976 @ 27.78s vs random 0.9974 @ 7.94s)"
+  },
+  "explain": {
+    "status": "ok",
+    "stage": "explain",
+    "model": "random_forest_bayes",
+    "shap": {
+      "method": "tree",
+      "n_explained": 800,
+      "global_importance": [
+        [
+          "num__Light",
+          0.228483
+        ],
+        [
+          "num__CO2",
+          0.043252
+        ],
+        [
+          "num__Temperature",
+          0.018959
+        ],
+        [
+          "num__HumidityRatio",
+          0.007407
+        ],
+        [
+          "num__Humidity",
+          0.001622
+        ]
+      ],
+      "local_example": {
+        "index": 17,
+        "predicted": 1,
+        "top_contributions": [
+          [
+            "num__Light",
+            0.586345
+          ],
+          [
+            "num__CO2",
+            -0.063782
+          ],
+          [
+            "num__Temperature",
+            0.047911
+          ],
+          [
+            "num__HumidityRatio",
+            0.011246
+          ],
+          [
+            "num__Humidity",
+            0.003937
+          ]
+        ]
+      }
+    },
+    "reliability": {
+      "n_bins": 10,
+      "bins": [
+        {
+          "bin": 0,
+          "mean_confidence": 0.778,
+          "accuracy": 0.9894,
+          "n": 756
+        },
+        {
+          "bin": 1,
+          "mean_confidence": 0.798,
+          "accuracy": 0.9955,
+          "n": 887
+        },
+        {
+          "bin": 2,
+          "mean_confidence": 0.8578,
+          "accuracy": 0.9763,
+          "n": 803
+        },
+        {
+          "bin": 3,
+          "mean_confidence": 0.9034,
+          "accuracy": 0.9952,
+          "n": 837
+        },
+        {
+          "bin": 4,
+          "mean_confidence": 0.9283,
+          "accuracy": 0.9891,
+          "n": 828
+        },
+        {
+          "bin": 5,
+          "mean_confidence": 0.9456,
+          "accuracy": 0.9927,
+          "n": 823
+        },
+        {
+          "bin": 6,
+          "mean_confidence": 0.9552,
+          "accuracy": 1.0,
+          "n": 823
+        },
+        {
+          "bin": 7,
+          "mean_confidence": 0.9695,
+          "accuracy": 1.0,
+          "n": 817
+        },
+        {
+          "bin": 8,
+          "mean_confidence": 0.9802,
+          "accuracy": 0.9976,
+          "n": 826
+        },
+        {
+          "bin": 9,
+          "mean_confidence": 0.9904,
+          "accuracy": 1.0,
+          "n": 824
+        }
+      ],
+      "flag_fraction": 0.2,
+      "confidence_threshold": 0.8086,
+      "coverage_flagged": 0.2008,
+      "accuracy_auto_accepted": 0.9939,
+      "accuracy_flagged": 0.9927,
+      "errors_total": 52,
+      "errors_caught_by_flag": 12,
+      "error_capture_rate": 0.2308,
+      "overall_accuracy": 0.9937
+    },
+    "reliability_note": "flagging the least-confident 20% of cases for review catches 23% of all errors; the auto-accepted 80% are 99.4% accurate vs 99.3% on the flagged slice",
+    "figures": {
+      "shap_importance": "results\\occupancy\\figures\\shap_importance.png",
+      "reliability": "results\\occupancy\\figures\\reliability.png"
+    }
+  },
+  "drift": {
+    "status": "ok",
+    "stage": "drift",
+    "model": "random_forest_bayes",
+    "metric": "accuracy",
+    "retrain_mode": "sliding",
+    "n_chunks": 10,
+    "chunks": [
+      {
+        "chunk": 0,
+        "n": 823,
+        "static_score": 0.9988,
+        "mean_psi": 6.3581,
+        "top_drift_feature": [
+          "CO2",
+          11.6389
+        ],
+        "adaptive_score": 0.9988,
+        "static_auc": 1.0,
+        "time_start": "2015-02-12 16:15:59",
+        "time_end": "2015-02-13 05:57:59"
+      },
+      {
+        "chunk": 1,
+        "n": 823,
+        "static_score": 0.9757,
+        "mean_psi": 5.1556,
+        "top_drift_feature": [
+          "CO2",
+          9.2409
+        ],
+        "adaptive_score": 0.9757,
+        "static_auc": 0.9858,
+        "time_start": "2015-02-13 05:58:59",
+        "time_end": "2015-02-13 19:40:59"
+      },
+      {
+        "chunk": 2,
+        "n": 823,
+        "static_score": 1.0,
+        "mean_psi": 8.8137,
+        "top_drift_feature": [
+          "CO2",
+          12.4349
+        ],
+        "adaptive_score": 1.0,
+        "static_auc": null,
+        "time_start": "2015-02-13 19:41:59",
+        "time_end": "2015-02-14 09:23:59"
+      },
+      {
+        "chunk": 3,
+        "n": 823,
+        "static_score": 0.9988,
+        "mean_psi": 9.298,
+        "top_drift_feature": [
+          "CO2",
+          12.4349
+        ],
+        "adaptive_score": 0.9988,
+        "static_auc": null,
+        "time_start": "2015-02-14 09:24:59",
+        "time_end": "2015-02-14 23:06:59"
+      },
+      {
+        "chunk": 4,
+        "n": 822,
+        "static_score": 0.9866,
+        "mean_psi": 6.953,
+        "top_drift_feature": [
+          "CO2",
+          10.6484
+        ],
+        "adaptive_score": 0.9866,
+        "static_auc": null,
+        "time_start": "2015-02-14 23:08:00",
+        "time_end": "2015-02-15 12:49:00"
+      },
+      {
+        "chunk": 5,
+        "n": 822,
+        "static_score": 1.0,
+        "mean_psi": 6.0102,
+        "top_drift_feature": [
+          "CO2",
+          9.2686
+        ],
+        "adaptive_score": 1.0,
+        "static_auc": null,
+        "time_start": "2015-02-15 12:49:59",
+        "time_end": "2015-02-16 02:31:00"
+      },
+      {
+        "chunk": 6,
+        "n": 822,
+        "static_score": 0.9866,
+        "mean_psi": 5.6158,
+        "top_drift_feature": [
+          "CO2",
+          10.5782
+        ],
+        "adaptive_score": 0.9866,
+        "static_auc": 0.9917,
+        "time_start": "2015-02-16 02:31:59",
+        "time_end": "2015-02-16 16:13:00"
+      },
+      {
+        "chunk": 7,
+        "n": 822,
+        "static_score": 1.0,
+        "mean_psi": 7.321,
+        "top_drift_feature": [
+          "Humidity",
+          11.0598
+        ],
+        "adaptive_score": 1.0,
+        "static_auc": 1.0,
+        "time_start": "2015-02-16 16:14:00",
+        "time_end": "2015-02-17 05:55:00"
+      },
+      {
+        "chunk": 8,
+        "n": 822,
+        "static_score": 0.9915,
+        "mean_psi": 6.7202,
+        "top_drift_feature": [
+          "Humidity",
+          10.4459
+        ],
+        "adaptive_score": 0.9927,
+        "static_auc": 0.9945,
+        "time_start": "2015-02-17 05:55:59",
+        "time_end": "2015-02-17 19:37:00"
+      },
+      {
+        "chunk": 9,
+        "n": 822,
+        "static_score": 0.9988,
+        "mean_psi": 7.267,
+        "top_drift_feature": [
+          "CO2",
+          11.4757
+        ],
+        "adaptive_score": 0.9988,
+        "static_auc": 1.0,
+        "time_start": "2015-02-17 19:38:00",
+        "time_end": "2015-02-18 09:19:00"
+      }
+    ],
+    "static_mean": 0.9937,
+    "adaptive_mean": 0.9938,
+    "trend": {
+      "early_mean": 0.9915,
+      "late_mean": 0.9968,
+      "drift_magnitude": -0.0053,
+      "worse_over_time": false
+    },
+    "feature_drift": {
+      "mean_psi_trajectory": [
+        6.3581,
+        5.1556,
+        8.8137,
+        9.298,
+        6.953,
+        6.0102,
+        5.6158,
+        7.321,
+        6.7202,
+        7.267
+      ],
+      "max_mean_psi": 9.298
+    },
+    "detectors": {
+      "method": "adwin",
+      "status": "ok",
+      "n_changes": 0,
+      "change_chunks": []
+    },
+    "significance": {
+      "champion_vs_runner_up": {
+        "test": "mcnemar",
+        "model_a": "random_forest_bayes",
+        "model_b": "random_forest_random",
+        "accuracy_a": 0.9937,
+        "accuracy_b": 0.9937,
+        "table": {
+          "both_correct": 8172,
+          "both_wrong": 52,
+          "random_forest_bayes_only_correct": 0,
+          "random_forest_random_only_correct": 0
+        },
+        "n_discordant": 0,
+        "statistic": 0.0,
+        "p_value": 1.0,
+        "method": "no-disagreement",
+        "significant": false,
+        "better_model": "tie",
+        "interpretation": "random_forest_bayes and random_forest_random made identical predictions on every test row."
+      },
+      "champion_vs_linear_baseline": {
+        "test": "mcnemar",
+        "model_a": "random_forest_bayes",
+        "model_b": "logreg_none",
+        "accuracy_a": 0.9937,
+        "accuracy_b": 0.9931,
+        "table": {
+          "both_correct": 8164,
+          "both_wrong": 49,
+          "random_forest_bayes_only_correct": 8,
+          "logreg_none_only_correct": 3
+        },
+        "n_discordant": 11,
+        "statistic": 3.0,
+        "p_value": 0.226562,
+        "method": "exact",
+        "significant": false,
+        "better_model": "random_forest_bayes",
+        "interpretation": "random_forest_bayes and logreg_none disagree on 11 rows, split fairly evenly. p=0.2266 >= 0.05, so the difference is NOT statistically significant."
+      },
+      "static_vs_adaptive": {
+        "test": "mcnemar",
+        "model_a": "static",
+        "model_b": "adaptive",
+        "accuracy_a": 0.9937,
+        "accuracy_b": 0.9938,
+        "table": {
+          "both_correct": 8172,
+          "both_wrong": 51,
+          "static_only_correct": 0,
+          "adaptive_only_correct": 1
+        },
+        "n_discordant": 1,
+        "statistic": 0.0,
+        "p_value": 1.0,
+        "method": "exact",
+        "significant": false,
+        "better_model": "adaptive",
+        "interpretation": "static and adaptive disagree on 1 row, split fairly evenly. p=1 >= 0.05, so the difference is NOT statistically significant."
+      }
+    },
+    "verdict": "Frozen-model accuracy held up across time (0.999 -> 0.999; drift magnitude -0.005). Peak input drift (mean PSI) = 9.298 (notable). A sliding-retrained model beat the frozen one (accuracy 0.994 vs 0.994, gap 0.000 but not statistically significant). Champion vs linear baseline: not significant (p=0.226562).",
+    "figures": {
+      "drift_performance": "results\\occupancy\\figures\\drift_performance.png",
+      "drift_psi": "results\\occupancy\\figures\\drift_psi.png"
+    }
+  }
+}
