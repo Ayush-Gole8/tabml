@@ -65,10 +65,10 @@ dev = [
 all = ["tabml-guard[drift,dev]"]
 
 [project.urls]
-Homepage = "https://github.com/Ayush-Gole8/tabml-guard"
-Repository = "https://github.com/Ayush-Gole8/tabml-guard"
-Documentation = "https://github.com/Ayush-Gole8/tabml-guard#readme"
-"Bug Tracker" = "https://github.com/Ayush-Gole8/tabml-guard/issues"
+Homepage = "https://github.com/Ayush-Gole8/tabml"
+Repository = "https://github.com/Ayush-Gole8/tabml"
+Documentation = "https://github.com/Ayush-Gole8/tabml#readme"
+"Bug Tracker" = "https://github.com/Ayush-Gole8/tabml/issues"
 
 [project.scripts]
 tabml-guard = "tabml_guard.cli:main"
