@@ -3,7 +3,8 @@
 # -----------------------------------------------------------------------------
 # This is the ONLY file you edit to run the pipeline on a new dataset.
 # Point it at an OpenML dataset by name, or at a local CSV, set the target
-# (and optionally a time column), then run:   python run.py --config config.yaml
+# (and optionally a time column), then run:   tabml-guard run --config config.yaml
+# (or backwards-compatible: python run.py --config config.yaml)
 # =============================================================================
 
 dataset:
