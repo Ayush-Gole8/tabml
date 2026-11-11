@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.3] - 2026-11-11
+
+### Changed
+- Standardized README documentation to a concise, library-style PyPI specification mirroring NumPy and scikit-learn.
+- Cleaned legacy internal paths in code comments and docstrings.
+- Added `skip-existing: true` to the PyPI publish workflow to prevent re-run errors.
+
 ## [0.1.2] - 2026-11-06
 
 ### Changed
