@@ -25,7 +25,7 @@ What this stage does, step by step:
      Absent river, the per-chunk accuracy curve already tells the story.
 
   5. **Test significance.** McNemar's test (classification) / Wilcoxon (regression),
-     via ``src.stats``, on (a) champion vs the runner-up model, (b) champion vs the
+     via ``tabml_guard.stats``, on (a) champion vs the runner-up model, (b) champion vs the
      simple linear baseline, and (c) frozen vs adaptive — so every "X beats Y" claim
      in the report is backed by a p-value, not just a decimal.
 
@@ -236,7 +236,7 @@ def _detect_changes(correct_static: np.ndarray, chunks: list) -> dict:
 
 
 # --------------------------------------------------------------------------- #
-# Significance tests (via src.stats)
+# Significance tests (via tabml_guard.stats)
 # --------------------------------------------------------------------------- #
 def _compare(y_true, a, b, name_a, name_b, task) -> dict:
     if task == "classification":

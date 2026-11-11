@@ -1,23 +1,22 @@
 # Running TabML-Guard on Other Datasets
 
-TabML-Guard is dataset-agnostic. Nothing in `src/` knows about "electricity"
-specifically — every dataset detail comes from the config file. To point the
+TabML-Guard is dataset-agnostic. Nothing in `tabml_guard/` knows about "electricity"
+specifically — every dataset detail comes from the config file or CLI arguments. To point the
 whole pipeline (baselines → ensembles → HPO → SHAP + reliability → drift +
-significance → HTML report) at a new dataset, you edit a config and run:
+significance → HTML & PDF reports) at a new dataset, you edit a config and run:
 
 ```bash
-python run.py --config configs/<dataset>.yaml
+tabml-guard run --config configs/<dataset>.yaml
+# or: python run.py --config configs/<dataset>.yaml
 ```
 
-The report is written to `results/report_<dataset>.html` — the filename is
-derived from the dataset, so running several datasets leaves you with one
-report each instead of overwriting a single file:
+The reports are written into isolated per-dataset directories:
 
-- `config.yaml` → `results/report_electricity.html` (your original ELEC2 run)
-- `configs/occupancy_detection.yaml` → `results/report_occupancy.html`
-- `configs/metro_traffic.yaml` → `results/report_metro-traffic.html`
-- `configs/appliances_energy.yaml` → `results/report_appliances-energy.html`
-- `configs/bike_sharing.yaml` → `results/report_bike-sharing.html`
+- `config.yaml` → `results/electricity/report_electricity.html` (and `.pdf`)
+- `configs/occupancy_detection.yaml` → `results/occupancy/report_occupancy.html`
+- `configs/metro_traffic.yaml` → `results/metro-traffic/report_metro-traffic.html`
+- `configs/appliances_energy.yaml` → `results/appliances-energy/report_appliances-energy.html`
+- `configs/bike_sharing.yaml` → `results/bike-sharing/report_bike-sharing.html`
 
 This folder ships with five ready-to-run configs. One (electricity) runs
 straight from OpenML with no download; the other four each need a single CSV
@@ -152,10 +151,11 @@ five shipped datasets are all safe on this front.
 #    -> data/metro_traffic.csv   (from UCI dataset 492)
 
 # 2. Run the pipeline on it
-python run.py --config configs/metro_traffic.yaml
+tabml-guard run --config configs/metro_traffic.yaml
 
 # 3. Open the report
-#    -> results/report_metro-traffic.html
+#    -> results/metro-traffic/report_metro-traffic.html
+#    -> results/metro-traffic/report_metro-traffic.pdf
 ```
 
 That's the whole workflow. To try your own data, copy the closest config,

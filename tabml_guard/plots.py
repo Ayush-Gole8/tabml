@@ -3,7 +3,7 @@ directory and its path returned, so the report can embed it.
 
 Stages call these with ``output_dir`` being the *run directory* for this dataset
 (``results/<slug>/``), so figures from different configs never overwrite one
-another. See ``src/paths.py``.
+another. See ``tabml_guard.paths``.
 """
 from __future__ import annotations
 
